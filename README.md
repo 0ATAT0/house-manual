@@ -2,7 +2,9 @@
 
 A single-page guide for friends staying at the flat with Fred and Luna. Two tabs: the cats and their timetable, then how the flat works.
 
-The Flat comes first, organised as area cards: WiFi, front door and bins up top, then a card per room. The Cats tab leads with a navy panel naming the next feed and what to serve, beside the day's schedule. Everything is visible on the page, with no rows to open.
+Two levels. Each tab opens on a grid of tiles, one per area, and tapping a tile opens that area on its own page. The Flat has WiFi, front door, bins, windows, kitchen and living room. The Cats leads with a navy tile naming the next feed and what to serve, then Fred, Luna, saying hello, sleep and play, and the litter tray.
+
+Tiles carry a status badge where there's something live to say: the next feed on the navy tile, `TUE` on bins, `10–5` on sleep.
 
 Design follows the Strand Labs site rather than the palette tokens: white grounds, `gray-50` cards with a `gray-200` border and a soft shadow, bold Playfair headings in navy, Inter for body, a navy band for the vet details, and green used only on the next-feed marker. No cream, and light only.
 
@@ -26,7 +28,9 @@ Static site on GitHub Pages, served from `main` at the repository root. Push to 
 
 Content lives directly in `index.html`. The meal rows carry `data-feed="HH:MM"`, `data-name` and `data-food`, which drive the navy panel and the timeline: change a time in the visible cell and in `data-feed`, and everything above follows.
 
-Cards sit on a twelve-column grid. Give a card `s4`, `s5`, `s6` or `s7` for its desktop width, and `tall` to span two rows; below 760px everything is full width.
+Navigation is hash routing, so the phone's back gesture works and any area can be linked directly (`#kitchen`, `#feeding`). A tile is a `<button data-go="key">`; its page is an `<article class="detail" id="d-key" data-tab="flat|cats">`. Add both and it wires itself up.
+
+The tile grid is two columns on a phone, three from 700px and four from 1000px. The navy tile spans two.
 
 Bump `CACHE` in `sw.js` when changing anything other than `index.html`, so old assets are dropped.
 

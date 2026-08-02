@@ -22,9 +22,9 @@
   :root {
     color-scheme: light;
     --navy: #0f172a;
+    --navy-soft: #1e293b;
     --charcoal: #1c1c1c;
     --white: #ffffff;
-    --gray-75: #f6f7f9;
     --card: #f9fafb;
     --card-edge: #e5e7eb;
     --body: #4b5563;
@@ -34,8 +34,8 @@
     --sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
-    --radius: 1rem;
-    --ring: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow-lift: 0 12px 20px -6px rgba(15, 23, 42, 0.13), 0 4px 8px -4px rgba(15, 23, 42, 0.07);
   }
 
   html { -webkit-text-size-adjust: 100%; background: var(--white); }
@@ -48,22 +48,24 @@
     background: var(--white);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    padding-bottom: calc(var(--safe-bottom));
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   a { color: var(--navy); text-underline-offset: 3px; }
-  :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 4px; }
+  :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 6px; }
 
-  .shell { max-width: 1180px; margin: 0 auto; padding: 0 clamp(1.15rem, 4vw, 2.5rem); }
+  .shell { max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.1rem, 4vw, 2.5rem); }
 
-  /* ===================== header ===================== */
+  /* ======================= header ======================= */
 
   .topbar {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(255, 255, 255, 0.93);
+    backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--card-edge);
     padding-top: var(--safe-top);
   }
@@ -72,32 +74,31 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    gap: 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
   }
 
   .wordmark {
     font-family: var(--serif);
     font-weight: 700;
-    font-size: clamp(1.15rem, 3.6vw, 1.4rem);
+    font-size: clamp(1.05rem, 3.8vw, 1.35rem);
     letter-spacing: -0.02em;
     color: var(--navy);
     white-space: nowrap;
   }
 
-  .tabs { display: flex; gap: 0.5rem; }
+  .tabs { display: flex; gap: 0.4rem; }
 
   .tab {
     appearance: none;
     border: 1px solid var(--card-edge);
     background: var(--white);
     border-radius: 0.5rem;
-    padding: 0.5rem 1.1rem;
+    padding: 0.45rem 0.95rem;
     font-family: var(--sans);
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    letter-spacing: 0.01em;
     color: var(--muted);
     cursor: pointer;
     transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
@@ -105,504 +106,613 @@
   .tab:hover { color: var(--navy); border-color: #cbd5e1; }
   .tab[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--white); }
 
-  /* ===================== panels ===================== */
+  /* ======================= views ======================= */
 
-  .panel[hidden] { display: none; }
-  .panel { padding-top: clamp(2.25rem, 6vw, 3.75rem); }
+  [hidden] { display: none !important; }
+
+  main { flex: 1; padding-bottom: clamp(3rem, 8vw, 4rem); }
+
+  .view { padding-top: clamp(1.5rem, 5vw, 2.5rem); }
 
   @media (prefers-reduced-motion: no-preference) {
-    .panel:not([hidden]) .reveal { animation: rise 620ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
-    .panel:not([hidden]) .reveal:nth-child(2) { animation-delay: 70ms; }
-    .panel:not([hidden]) .reveal:nth-child(3) { animation-delay: 130ms; }
-    .panel:not([hidden]) .reveal:nth-child(4) { animation-delay: 180ms; }
-    .panel:not([hidden]) .reveal:nth-child(n+5) { animation-delay: 220ms; }
+    .view:not([hidden]) { animation: fade 320ms ease both; }
+    .grid > *:not([hidden]) { animation: rise 500ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+    .grid > *:nth-child(2) { animation-delay: 45ms; }
+    .grid > *:nth-child(3) { animation-delay: 90ms; }
+    .grid > *:nth-child(4) { animation-delay: 130ms; }
+    .grid > *:nth-child(5) { animation-delay: 165ms; }
+    .grid > *:nth-child(n+6) { animation-delay: 195ms; }
   }
-  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
-  /* ===================== section rule ===================== */
+  .view-head { display: grid; gap: 0.3rem; margin-bottom: clamp(1.25rem, 4vw, 1.75rem); }
 
-  .rule {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin: clamp(2.75rem, 7vw, 4.5rem) 0 clamp(1.5rem, 4vw, 2.25rem);
-  }
-  .rule:first-child { margin-top: 0; }
-  .rule .line { height: 1px; flex: 1; max-width: 9rem; }
-  .rule .line.l { background: linear-gradient(to right, transparent, var(--navy)); }
-  .rule .line.r { background: linear-gradient(to left, transparent, var(--navy)); }
-  .rule h2 {
+  .view-head h1 {
     font-family: var(--serif);
     font-weight: 700;
-    font-size: clamp(1.05rem, 3.4vw, 1.4rem);
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
+    font-size: clamp(1.85rem, 6.5vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
     color: var(--navy);
-    text-align: center;
   }
+  .view-head p { color: var(--muted); font-size: 0.98rem; max-width: 52ch; }
 
-  /* ===================== grid ===================== */
+  /* ======================= tile grid ======================= */
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: clamp(0.9rem, 2vw, 1.4rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.7rem, 2.2vw, 1.1rem);
   }
-  .grid > * { grid-column: span 12; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-  @media (min-width: 760px) {
-    .s4 { grid-column: span 4; }
-    .s5 { grid-column: span 5; }
-    .s6 { grid-column: span 6; }
-    .s7 { grid-column: span 7; }
-    .s8 { grid-column: span 8; }
-    .tall { grid-row: span 2; }
-  }
-
-  /* ===================== cards ===================== */
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--card-edge);
-    border-radius: var(--radius);
-    box-shadow: var(--ring);
-    padding: clamp(1.4rem, 3vw, 1.9rem);
+  .tile {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
-    transition: box-shadow 300ms ease, transform 300ms ease;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    min-height: clamp(7.5rem, 24vw, 9rem);
+    padding: clamp(0.9rem, 3vw, 1.15rem);
+    background: var(--card);
+    border: 1px solid var(--card-edge);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    text-align: left;
+    font-family: var(--sans);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 260ms ease, border-color 260ms ease;
   }
-  .card:hover {
-    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.09), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
-    border-color: #d7dbe1;
-  }
+  .tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: #d5dae1; }
+  .tile:active { transform: translateY(-1px); }
 
-  .card > h3 {
+  .tile h2 {
     font-family: var(--serif);
     font-weight: 700;
-    font-size: clamp(1.3rem, 3.6vw, 1.55rem);
-    line-height: 1.2;
+    font-size: clamp(1.12rem, 3.9vw, 1.3rem);
+    line-height: 1.15;
     letter-spacing: -0.015em;
     color: var(--navy);
   }
-
-  .card .tagline {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--charcoal);
-    margin-top: -0.75rem;
+  .tile .teaser {
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: var(--muted);
   }
 
-  .card p { color: var(--body); }
-  .card p + p { margin-top: 0.6rem; }
+  .badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.4rem;
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--navy);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
 
-  /* items inside a card */
+  .tile .arrow {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    color: #cbd5e1;
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), color 260ms ease;
+  }
+  .tile:hover .arrow { transform: translateX(3px); color: var(--navy); }
 
-  .items { display: grid; gap: 1rem; }
-  .items > div { display: grid; gap: 0.1rem; }
+  /* the one navy tile: next feed */
 
-  .item-label {
+  .tile.navy {
+    background: var(--navy);
+    border-color: var(--navy);
+    grid-column: span 2;
+    justify-content: space-between;
+  }
+  .tile.navy h2 { color: var(--white); font-size: clamp(1.7rem, 7vw, 2.1rem); }
+  .tile.navy .teaser { color: rgba(255, 255, 255, 0.75); font-size: 0.95rem; }
+  .tile.navy .badge { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.85); position: static; align-self: flex-start; }
+  .tile.navy .arrow { color: rgba(255, 255, 255, 0.5); }
+  .tile.navy:hover .arrow { color: var(--white); }
+  .tile.navy .stack { display: grid; gap: 0.25rem; margin-top: auto; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex: none; }
+
+  /* ======================= detail ======================= */
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: none;
+    border: 0;
+    padding: 0.35rem 0;
+    margin-bottom: 0.9rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 180ms ease;
+  }
+  .back:hover { color: var(--navy); }
+  .back svg { transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .back:hover svg { transform: translateX(-3px); }
+
+  .detail { max-width: 46rem; }
+
+  .detail > h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--navy);
+  }
+  .detail > .lede {
+    margin-top: 0.5rem;
+    font-size: clamp(1.02rem, 3.4vw, 1.15rem);
+    color: var(--charcoal);
+    max-width: 42ch;
+  }
+
+  .detail .body { display: grid; gap: 1.5rem; margin-top: clamp(1.75rem, 5vw, 2.5rem); }
+
+  .block { display: grid; gap: 0.3rem; }
+  .block h3 {
+    font-family: var(--sans);
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.11em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--muted);
   }
-  .item-body { color: var(--body); }
-  .item-body strong { color: var(--charcoal); font-weight: 600; }
+  .block p { max-width: 60ch; }
+  .block p + p { margin-top: 0.55rem; }
+  .block strong { color: var(--charcoal); font-weight: 600; }
 
-  .split { display: grid; gap: 1rem; }
-  @media (min-width: 520px) { .split { grid-template-columns: 1fr 1fr; } }
+  .keyline { border-top: 1px solid var(--card-edge); padding-top: 1.4rem; }
 
-  /* headline value, e.g. the WiFi password */
-
-  .headline {
-    font-family: var(--sans);
-    font-size: clamp(1.35rem, 4.6vw, 1.6rem);
+  .big {
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     color: var(--navy);
     word-break: break-word;
     user-select: all;
   }
-  .headline.plain { user-select: auto; }
+  .big.plain { user-select: auto; }
 
-  .foot { padding-top: 0.15rem; font-size: 0.9rem; color: var(--muted); }
-  .foot a { font-weight: 500; }
+  /* schedule inside the feeding detail */
 
-  /* ===================== navy card ===================== */
-
-  .card.navy {
-    align-self: start;
-    background: var(--navy);
-    border-color: var(--navy);
-    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.18), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
-    gap: 1.35rem;
-  }
-  .card.navy h3, .card.navy .now-title { color: var(--white); }
-  .card.navy p { color: rgba(255, 255, 255, 0.78); }
-
-  .now-kicker {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.66);
-  }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex: none; }
-
-  .now-title {
-    font-family: var(--serif);
-    font-weight: 700;
-    font-size: clamp(2rem, 7vw, 2.75rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-top: -0.7rem;
-  }
-
-  .now-sub { font-size: 1.02rem; color: rgba(255, 255, 255, 0.82); }
-  .now-sub strong { color: var(--white); font-weight: 600; }
-
-  .timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; margin-top: auto; }
-
-  .pip {
-    display: grid;
-    gap: 0.05rem;
-    padding: 0.6rem 0.3rem;
-    border-radius: 0.6rem;
-    background: rgba(255, 255, 255, 0.07);
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-    transition: background 300ms ease;
-  }
-  .pip .t { font-size: clamp(0.8rem, 3vw, 0.92rem); font-weight: 600; color: rgba(255, 255, 255, 0.92); }
-  .pip .m { font-size: 0.6rem; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); line-height: 1.4; }
-  .pip.done { opacity: 0.4; }
-  .pip.now { background: rgba(16, 185, 129, 0.18); }
-  .pip.now .t { color: var(--white); }
-  .pip.now .m { color: var(--green); font-weight: 600; }
-
-  /* ===================== schedule ===================== */
-
-  .sched { display: grid; }
+  .sched { display: grid; margin-top: 0.4rem; }
 
   .meal {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
-    gap: 0.15rem 1rem;
+    gap: 0.1rem 1rem;
     padding: 0.7rem 0;
     border-bottom: 1px solid var(--card-edge);
     font-variant-numeric: tabular-nums;
   }
-  .meal:last-child { border-bottom: 0; padding-bottom: 0; }
-  .meal:first-child { padding-top: 0; }
-
-  .meal .name { font-weight: 600; color: var(--charcoal); grid-column: 1; }
-  .meal .when { grid-column: 1; font-size: 0.92rem; color: var(--muted); }
+  .meal:last-child { border-bottom: 0; }
+  .meal .name { font-weight: 600; color: var(--charcoal); }
+  .meal .when { grid-column: 1; font-size: 0.9rem; color: var(--muted); }
   .meal .amount { grid-column: 2; grid-row: 1 / span 2; align-self: center; text-align: right; white-space: nowrap; }
   .meal .amount b { font-weight: 600; color: var(--charcoal); }
   .meal .amount span {
     display: inline-block;
     margin-left: 0.4rem;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--muted);
   }
-
   .meal.is-next .name { color: var(--navy); }
   .meal.is-next .name::after {
     content: 'Next';
     display: inline-block;
-    margin-left: 0.55rem;
-    padding: 0.05rem 0.45rem;
+    margin-left: 0.5rem;
+    padding: 0.05rem 0.4rem;
     border-radius: 0.3rem;
     background: var(--navy);
     color: var(--white);
-    font-family: var(--sans);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     vertical-align: 0.15em;
   }
-
   .meal.overnight .name, .meal.overnight .amount b { color: var(--muted); font-weight: 500; }
 
-  /* ===================== help band ===================== */
+  .pair { display: grid; gap: 1.5rem; }
+  @media (min-width: 620px) { .pair { grid-template-columns: 1fr 1fr; gap: 2rem; } }
 
-  .help {
-    margin-top: clamp(3rem, 8vw, 5rem);
-    background: var(--navy);
-    color: rgba(255, 255, 255, 0.8);
-  }
+  /* ======================= help band ======================= */
+
+  .help { background: var(--navy); color: rgba(255, 255, 255, 0.78); }
   .help .shell {
     padding-top: clamp(2.25rem, 6vw, 3rem);
     padding-bottom: calc(clamp(2.25rem, 6vw, 3rem) + var(--safe-bottom));
     display: grid;
-    gap: 1.1rem;
+    gap: 1rem;
     justify-items: center;
     text-align: center;
   }
   .help h2 {
     font-family: var(--serif);
     font-weight: 700;
-    font-size: clamp(1.6rem, 5vw, 2.25rem);
-    letter-spacing: -0.015em;
+    font-size: clamp(1.5rem, 5vw, 2.1rem);
+    letter-spacing: -0.02em;
     color: var(--white);
   }
-  .help p { max-width: 46ch; }
+  .help p { max-width: 44ch; font-size: 0.98rem; }
   .help .call {
     display: inline-block;
     background: var(--white);
     color: var(--navy);
     font-weight: 600;
     font-size: 1.05rem;
-    letter-spacing: 0.01em;
-    padding: 0.85rem 2rem;
+    padding: 0.8rem 1.9rem;
     border-radius: 0.5rem;
     text-decoration: none;
     font-variant-numeric: tabular-nums;
     transition: opacity 200ms ease;
   }
   .help .call:hover { opacity: 0.9; }
-  .help address { font-style: normal; font-size: 0.92rem; color: rgba(255, 255, 255, 0.6); }
+  .help address { font-style: normal; font-size: 0.9rem; color: rgba(255, 255, 255, 0.55); }
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="shell">
-    <div class="wordmark">Fred, Luna &amp; the Flat</div>
+    <span class="wordmark">Fred, Luna &amp; the Flat</span>
     <div class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" id="tab-flat" aria-controls="panel-flat" aria-selected="true">The Flat</button>
-      <button class="tab" role="tab" id="tab-cats" aria-controls="panel-cats" aria-selected="false" tabindex="-1">The Cats</button>
+      <button class="tab" role="tab" id="tab-flat" aria-selected="true">The Flat</button>
+      <button class="tab" role="tab" id="tab-cats" aria-selected="false" tabindex="-1">The Cats</button>
     </div>
   </div>
 </header>
 
 <main class="shell">
 
-  <!-- ========================= FLAT ========================= -->
-  <div class="panel" id="panel-flat" role="tabpanel" aria-labelledby="tab-flat" tabindex="0">
-
-    <div class="rule reveal"><span class="line l"></span><h2>Getting Settled</h2><span class="line r"></span></div>
-
-    <div class="grid">
-      <article class="card s4 reveal">
-        <h3>WiFi</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">Password</span>
-            <span class="headline">KmGk73n7VTKv</span>
-          </div>
-        </div>
-        <p class="foot">Tap the password to select it.</p>
-      </article>
-
-      <article class="card s4 reveal">
-        <h3>Front door</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">To lock it</span>
-            <span class="headline plain">Handle up, then key</span>
-          </div>
-        </div>
-        <p class="foot">Lifting the handle engages the bolts. It won't lock otherwise.</p>
-      </article>
-
-      <article class="card s4 reveal">
-        <h3>Bins</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">Recycling</span>
-            <span class="item-body"><strong>Tuesday evening</strong>, out the night before</span>
-          </div>
-          <div>
-            <span class="item-label">General waste</span>
-            <span class="item-body">Collected daily, so put it out whenever</span>
-          </div>
-        </div>
-      </article>
+  <!-- ==================== HOME: FLAT ==================== -->
+  <section class="view" id="home-flat">
+    <div class="view-head">
+      <h1>The Flat</h1>
+      <p>Everything you'll need, one area at a time. Tap any of these.</p>
     </div>
-
-    <div class="rule reveal"><span class="line l"></span><h2>Room by Room</h2><span class="line r"></span></div>
-
     <div class="grid">
-      <article class="card s6 tall reveal">
-        <h3>Kitchen</h3>
-        <p class="tagline">Three machines, all straightforward.</p>
-        <div class="items">
-          <div>
-            <span class="item-label">Coffee</span>
-            <span class="item-body">The black machine makes pourover. Beans are in the black container next to the microwave; filter papers and the basket live in the cupboard below. <strong>Medium roast</strong> takes five minutes and is the everyday one. <strong>Cold brew</strong> takes ninety, so we set it going before bed.</span>
-          </div>
-          <div>
-            <span class="item-label">Dishwasher</span>
-            <span class="item-body">Tablet in, press power on, then close the door. Closing it is what starts the cycle.</span>
-          </div>
-          <div>
-            <span class="item-label">Washing machine</span>
-            <span class="item-body">Cotton setting. Press the temperature button once to drop it to <strong>30</strong>, or leave it at <strong>40</strong>. Tablets and fabric softener are on the shelf above.</span>
-          </div>
-        </div>
-        <p class="foot"><a href="https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Aiden_GTKYG_NA.pdf?v=1724951821" rel="noopener">Coffee machine manual (PDF)</a></p>
-      </article>
 
-      <article class="card s6 reveal">
-        <h3>Windows</h3>
-        <p class="tagline">The one thing to get right with the cats loose.</p>
-        <div class="items split">
-          <div>
-            <span class="item-label">Upstairs</span>
-            <span class="item-body">Cat locks fitted, so these are safe to open. Push in the two holds on the lever to move them.</span>
-          </div>
-          <div>
-            <span class="item-label">Downstairs</span>
-            <span class="item-body">No locks. We keep these shut unless the cats are harnessed or closed in another room.</span>
-          </div>
-        </div>
-      </article>
+      <button class="tile" data-go="wifi">
+        <span class="badge">Password</span>
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>WiFi</h2>
+        <span class="teaser">Network password</span>
+      </button>
 
-      <article class="card s6 reveal">
-        <h3>Living room</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">Apple TV</span>
-            <span class="item-body">Amazon Prime is signed in. Plex has everything else gathered across the different platforms, so start there if you're after something specific.</span>
-          </div>
-        </div>
-      </article>
+      <button class="tile" data-go="door">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Front door</h2>
+        <span class="teaser">It has a knack to it</span>
+      </button>
+
+      <button class="tile" data-go="bins">
+        <span class="badge">Tue</span>
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Bins</h2>
+        <span class="teaser">Recycling and general waste</span>
+      </button>
+
+      <button class="tile" data-go="windows">
+        <span class="badge">Cats</span>
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Windows</h2>
+        <span class="teaser">Which ones are safe to open</span>
+      </button>
+
+      <button class="tile" data-go="kitchen">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Kitchen</h2>
+        <span class="teaser">Coffee, dishwasher, washing machine</span>
+      </button>
+
+      <button class="tile" data-go="living">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Living room</h2>
+        <span class="teaser">Apple TV and what's signed in</span>
+      </button>
+
     </div>
+  </section>
 
-  </div>
-
-  <!-- ========================= CATS ========================= -->
-  <div class="panel" id="panel-cats" role="tabpanel" aria-labelledby="tab-cats" tabindex="0" hidden>
-
-    <div class="rule reveal"><span class="line l"></span><h2>Feeding</h2><span class="line r"></span></div>
-
+  <!-- ==================== HOME: CATS ==================== -->
+  <section class="view" id="home-cats" hidden>
+    <div class="view-head">
+      <h1>The Cats</h1>
+      <p>Fred and Luna. Feeding is the only thing on a clock.</p>
+    </div>
     <div class="grid">
-      <article class="card navy s5 reveal">
-        <span class="now-kicker"><span class="dot"></span><span id="now-kicker-text">Next feed</span></span>
-        <div class="now-title" id="now-title">Breakfast</div>
-        <div class="now-sub" id="now-sub"></div>
-        <div class="timeline" id="timeline"></div>
-      </article>
 
-      <article class="card s7 reveal">
-        <h3>The day</h3>
-        <p class="tagline">40g each cat, four times a day, plus dry left down overnight.</p>
-        <div class="sched" id="sched">
-          <div class="meal" data-feed="7:00" data-name="Breakfast" data-food="40g of wet">
-            <span class="name">Breakfast</span>
-            <span class="when">7:00 – 7:30am</span>
-            <span class="amount"><b>40g</b><span>Wet</span></span>
-          </div>
-          <div class="meal" data-feed="12:30" data-name="Lunch" data-food="40g of wet">
-            <span class="name">Lunch</span>
-            <span class="when">12:30 – 1:00pm</span>
-            <span class="amount"><b>40g</b><span>Wet</span></span>
-          </div>
-          <div class="meal" data-feed="17:30" data-name="First dinner" data-food="40g of dry">
-            <span class="name">First dinner</span>
-            <span class="when">5:30 – 6:00pm</span>
-            <span class="amount"><b>40g</b><span>Dry</span></span>
-          </div>
-          <div class="meal" data-feed="21:00" data-name="Second dinner" data-food="40g of wet">
-            <span class="name">Second dinner</span>
-            <span class="when">9:00 – 9:30pm</span>
-            <span class="amount"><b>40g</b><span>Wet</span></span>
-          </div>
-          <div class="meal overnight">
-            <span class="name">Overnight</span>
-            <span class="when">Left down at bedtime</span>
-            <span class="amount"><b>~20g</b><span>Dry</span></span>
-          </div>
+      <button class="tile navy" data-go="feeding">
+        <span class="badge"><span class="dot"></span><span id="tile-kicker">Next feed</span></span>
+        <div class="stack">
+          <h2 id="tile-title">Breakfast</h2>
+          <span class="teaser" id="tile-sub"></span>
         </div>
-      </article>
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
 
-      <article class="card s6 reveal">
-        <h3>Serving it</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">Wet food</span>
-            <span class="item-body">It wants to be in chunks rather than a block, Luna especially. Pressing a fork into it does the job. A splash of water over the top helps with hydration.</span>
-          </div>
-          <div>
-            <span class="item-label">Dry food</span>
-            <span class="item-body">Straight in the bowl. The overnight portion goes down when you turn in.</span>
-          </div>
-        </div>
-      </article>
+      <button class="tile" data-go="fred">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Fred</h2>
+        <span class="teaser">Greedy, easy-going, belly rubs</span>
+      </button>
 
-      <article class="card s6 reveal">
-        <h3>If one isn't eating</h3>
-        <div class="items">
-          <div>
-            <span class="item-label">Luna</span>
-            <span class="item-body">Normal. She eats much less than Fred and often needs a fork held out to get her going.</span>
-          </div>
-          <div>
-            <span class="item-label">Fred</span>
-            <span class="item-body">Unusual, he's a pig. If he turns down two meals in a row, call us.</span>
-          </div>
-        </div>
-      </article>
+      <button class="tile" data-go="luna">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Luna</h2>
+        <span class="teaser">Smaller appetite, very clear with you</span>
+      </button>
+
+      <button class="tile" data-go="hello">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Saying hello</h2>
+        <span class="teaser">Slow blinks, holding, laps</span>
+      </button>
+
+      <button class="tile" data-go="rest">
+        <span class="badge">10–5</span>
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Sleep and play</h2>
+        <span class="teaser">Out cold most of the day</span>
+      </button>
+
+      <button class="tile" data-go="litter">
+        <svg class="arrow" width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M9 1l5 5-5 5M14 6H1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Litter tray</h2>
+        <span class="teaser">Morning and evening</span>
+      </button>
+
     </div>
+  </section>
 
-    <div class="rule reveal"><span class="line l"></span><h2>Telling Them Apart</h2><span class="line r"></span></div>
+  <!-- ==================== DETAILS ==================== -->
+  <section class="view" id="detail-view" hidden>
+    <button class="back" id="back-btn">
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden="true"><path d="M6 1L1 6l5 5M1 6h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="back-label">All areas</span>
+    </button>
 
-    <div class="grid">
-      <article class="card s6 reveal">
-        <h3>Fred</h3>
-        <p class="tagline">Greedy, easy-going, hopeless at covering.</p>
-        <div class="items">
-          <div><span class="item-label">Food</span><span class="item-body">Clears his bowl and would happily start on Luna's.</span></div>
-          <div><span class="item-label">Affection</span><span class="item-body">Heavy belly rubs, the firmer the better.</span></div>
-          <div><span class="item-label">Being picked up</span><span class="item-body">Will usually just accept it.</span></div>
+    <article class="detail" id="d-wifi" data-tab="flat" hidden>
+      <h1>WiFi</h1>
+      <p class="lede">One network, one password, no guest network to worry about.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Password</h3>
+          <span class="big">KmGk73n7VTKv</span>
+          <p>Tap it to select the whole thing.</p>
         </div>
-      </article>
+      </div>
+    </article>
 
-      <article class="card s6 reveal">
-        <h3>Luna</h3>
-        <p class="tagline">Smaller appetite, particular, very clear with you.</p>
-        <div class="items">
-          <div><span class="item-label">Food</span><span class="item-body">Wants it properly broken up, and often needs encouraging first.</span></div>
-          <div><span class="item-label">Affection</span><span class="item-body">Head scratches, cheeks and chin. Belly rubs too, but lighter than Fred's.</span></div>
-          <div><span class="item-label">Being picked up</span><span class="item-body">Some days yes, some days no, and she'll tell you which.</span></div>
+    <article class="detail" id="d-door" data-tab="flat" hidden>
+      <h1>Front door</h1>
+      <p class="lede">It won't lock unless you do this in the right order.</p>
+      <div class="body">
+        <div class="block">
+          <h3>To lock it</h3>
+          <span class="big plain">Lift the handle, then turn the key</span>
+          <p>Lifting the handle is what engages the bolts. Turning the key on its own does nothing, and the door will feel shut while being unlocked.</p>
         </div>
-      </article>
-    </div>
+      </div>
+    </article>
 
-    <div class="rule reveal"><span class="line l"></span><h2>Living With Them</h2><span class="line r"></span></div>
+    <article class="detail" id="d-bins" data-tab="flat" hidden>
+      <h1>Bins</h1>
+      <p class="lede">Only one of them is on a schedule.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Recycling</h3>
+          <p><strong>Tuesday evening.</strong> Put it out the night before collection.</p>
+        </div>
+        <div class="block keyline">
+          <h3>General waste</h3>
+          <p>Collected daily, so it can go out whenever it's full.</p>
+        </div>
+      </div>
+    </article>
 
-    <div class="grid">
-      <article class="card s4 reveal">
-        <h3>Saying hello</h3>
-        <p>Staring at them wide-eyed freaks them out after a while. A slow blink is how you tell them everything's fine.</p>
-        <p>Neither is much of a lap cat at the moment, so don't take it personally.</p>
-      </article>
+    <article class="detail" id="d-windows" data-tab="flat" hidden>
+      <h1>Windows</h1>
+      <p class="lede">The one thing to get right while the cats are loose.</p>
+      <div class="body">
+        <div class="pair">
+          <div class="block">
+            <h3>Upstairs</h3>
+            <p>Cat locks are fitted, so these are safe to open. Push in the two holds on the lever to move them.</p>
+          </div>
+          <div class="block">
+            <h3>Downstairs</h3>
+            <p>No locks fitted. We keep these shut unless the cats are harnessed or closed in another room.</p>
+          </div>
+        </div>
+      </div>
+    </article>
 
-      <article class="card s4 reveal">
-        <h3>Sleep and play</h3>
-        <p>They sleep most of the day, roughly 10am to 5pm, surfacing for lunch. Their beds are in our room, though they're rarely in them all night.</p>
-        <p>They tire each other out, so there's nothing you need to do. If they're still going when you want to sleep, shut the bedroom door.</p>
-      </article>
+    <article class="detail" id="d-kitchen" data-tab="flat" hidden>
+      <h1>Kitchen</h1>
+      <p class="lede">Three machines, all straightforward once you know the quirk.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Coffee</h3>
+          <p>The black machine makes pourover. Beans are in the black container next to the microwave; filter papers and the basket live in the cupboard below.</p>
+          <p>It has a lot of settings, but two get used. <strong>Medium roast</strong> takes about five minutes and is the everyday one. <strong>Cold brew</strong> takes ninety, so we set it going before bed.</p>
+          <p><a href="https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Aiden_GTKYG_NA.pdf?v=1724951821" rel="noopener">Full machine guide (PDF)</a></p>
+        </div>
+        <div class="block keyline">
+          <h3>Dishwasher</h3>
+          <p>Tablet in, press power on, then close the door. Closing it is what starts the cycle.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Washing machine</h3>
+          <p>Use the cotton setting. Press the temperature button once to drop it to <strong>30</strong>, or leave it at <strong>40</strong>. Tablets and fabric softener are on the shelf above the machine.</p>
+        </div>
+      </div>
+    </article>
 
-      <article class="card s4 reveal">
-        <h3>Litter tray</h3>
-        <p>Morning and evening, usually. Luna buries hers, Fred makes no effort at all.</p>
-        <p>It stinks, and there's no fixing it: every masking product is toxic to animals apart from candles. Scoop when you notice, and open a window with the cats shut safely elsewhere.</p>
-      </article>
-    </div>
+    <article class="detail" id="d-living" data-tab="flat" hidden>
+      <h1>Living room</h1>
+      <p class="lede">Everything runs through the Apple TV.</p>
+      <div class="body">
+        <div class="block">
+          <h3>What's signed in</h3>
+          <p>Amazon Prime is ready to go. Plex has everything else gathered across the different platforms, so start there if you're after something specific.</p>
+        </div>
+      </div>
+    </article>
 
-  </div>
+    <article class="detail" id="d-feeding" data-tab="cats" hidden>
+      <h1>Feeding</h1>
+      <p class="lede">Four meals a day, 40g each cat each time, plus a little dry left down overnight.</p>
+      <div class="body">
+        <div class="block">
+          <h3>The day</h3>
+          <div class="sched">
+            <div class="meal" data-feed="7:00" data-name="Breakfast" data-food="40g of wet">
+              <span class="name">Breakfast</span>
+              <span class="when">7:00 – 7:30am</span>
+              <span class="amount"><b>40g</b><span>Wet</span></span>
+            </div>
+            <div class="meal" data-feed="12:30" data-name="Lunch" data-food="40g of wet">
+              <span class="name">Lunch</span>
+              <span class="when">12:30 – 1:00pm</span>
+              <span class="amount"><b>40g</b><span>Wet</span></span>
+            </div>
+            <div class="meal" data-feed="17:30" data-name="First dinner" data-food="40g of dry">
+              <span class="name">First dinner</span>
+              <span class="when">5:30 – 6:00pm</span>
+              <span class="amount"><b>40g</b><span>Dry</span></span>
+            </div>
+            <div class="meal" data-feed="21:00" data-name="Second dinner" data-food="40g of wet">
+              <span class="name">Second dinner</span>
+              <span class="when">9:00 – 9:30pm</span>
+              <span class="amount"><b>40g</b><span>Wet</span></span>
+            </div>
+            <div class="meal overnight">
+              <span class="name">Overnight</span>
+              <span class="when">Left down at bedtime</span>
+              <span class="amount"><b>~20g</b><span>Dry</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="block keyline">
+          <h3>Serving the wet food</h3>
+          <p>It wants to be in chunks rather than a block, Luna especially. Pressing a fork into it does the job. A splash of water over the top helps with hydration.</p>
+        </div>
+        <div class="block keyline">
+          <h3>If one of them isn't eating</h3>
+          <p>Luna eats much less than Fred and often needs a fork held out to get her going. That's normal.</p>
+          <p>Fred turning down a meal is the odd one. If he skips two in a row, call us.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail" id="d-fred" data-tab="cats" hidden>
+      <h1>Fred</h1>
+      <p class="lede">Greedy, easy-going, hopeless at covering his litter.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Food</h3>
+          <p>Clears his bowl first and would happily start on Luna's.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Affection</h3>
+          <p>Heavy belly rubs, the firmer the better.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Being picked up</h3>
+          <p>Will usually just accept it.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail" id="d-luna" data-tab="cats" hidden>
+      <h1>Luna</h1>
+      <p class="lede">Smaller appetite, more particular, and very clear about what she wants.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Food</h3>
+          <p>Wants it properly broken up, and often needs a fork held out before she starts.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Affection</h3>
+          <p>Head scratches, cheeks and chin. Belly rubs too, but lighter than Fred's.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Being picked up</h3>
+          <p>Some days yes, some days no, and she'll make it obvious which. Put her down when she says so.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail" id="d-hello" data-tab="cats" hidden>
+      <h1>Saying hello</h1>
+      <p class="lede">Cat manners, briefly.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Eye contact</h3>
+          <p>Staring at them wide-eyed freaks them out after a while. A slow blink is how you tell them everything's fine.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Laps</h3>
+          <p>Neither is much of a lap cat at the moment, so don't take it personally if they won't settle on you.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail" id="d-rest" data-tab="cats" hidden>
+      <h1>Sleep and play</h1>
+      <p class="lede">They run the day themselves. Nothing needed from you.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Sleep</h3>
+          <p>Out cold from roughly 10am to 5pm, surfacing for lunch. Their beds are in our room, though they're rarely in them all night.</p>
+        </div>
+        <div class="block keyline">
+          <h3>Play</h3>
+          <p>The vet's line is fifteen minutes a day for a solo cat, and these two well exceed that between themselves. Mornings and evenings are their liveliest.</p>
+          <p>If they're still going when you want to sleep, shut the bedroom door.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="detail" id="d-litter" data-tab="cats" hidden>
+      <h1>Litter tray</h1>
+      <p class="lede">Morning and evening, usually.</p>
+      <div class="body">
+        <div class="block">
+          <h3>Who's who</h3>
+          <p>Luna buries hers properly. Fred makes no effort at all.</p>
+        </div>
+        <div class="block keyline">
+          <h3>The smell</h3>
+          <p>There's no fixing it: every masking product is toxic to animals apart from candles. Scoop when you notice it, and open a window with the cats shut safely in another room.</p>
+        </div>
+      </div>
+    </article>
+
+  </section>
 
 </main>
 
@@ -616,53 +726,80 @@
 </section>
 
 <script>
-  // ---------- tabs ----------
   (function () {
-    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+    var tabFlat = document.getElementById('tab-flat');
+    var tabCats = document.getElementById('tab-cats');
+    var homes = { flat: document.getElementById('home-flat'), cats: document.getElementById('home-cats') };
+    var detailView = document.getElementById('detail-view');
+    var details = Array.prototype.slice.call(document.querySelectorAll('.detail'));
+    var backLabel = document.getElementById('back-label');
+    var currentTab = 'flat';
 
-    function select(tab) {
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1;
-        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-      });
-      try { localStorage.setItem('manual-tab', tab.id); } catch (err) {}
+    function showHome(tab) {
+      currentTab = tab;
+      homes.flat.hidden = tab !== 'flat';
+      homes.cats.hidden = tab !== 'cats';
+      detailView.hidden = true;
+      details.forEach(function (d) { d.hidden = true; });
+      tabFlat.setAttribute('aria-selected', tab === 'flat' ? 'true' : 'false');
+      tabCats.setAttribute('aria-selected', tab === 'cats' ? 'true' : 'false');
+      tabFlat.tabIndex = tab === 'flat' ? 0 : -1;
+      tabCats.tabIndex = tab === 'cats' ? 0 : -1;
+      try { localStorage.setItem('manual-tab', tab); } catch (err) {}
+    }
+
+    function showDetail(key) {
+      var target = document.getElementById('d-' + key);
+      if (!target) { showHome(currentTab); return; }
+      currentTab = target.dataset.tab;
+      homes.flat.hidden = true;
+      homes.cats.hidden = true;
+      details.forEach(function (d) { d.hidden = d !== target; });
+      detailView.hidden = false;
+      backLabel.textContent = currentTab === 'cats' ? 'The Cats' : 'The Flat';
+      tabFlat.setAttribute('aria-selected', currentTab === 'flat' ? 'true' : 'false');
+      tabCats.setAttribute('aria-selected', currentTab === 'cats' ? 'true' : 'false');
+    }
+
+    function route() {
+      var hash = (location.hash || '').replace('#', '');
+      if (!hash || hash === 'flat' || hash === 'cats') {
+        showHome(hash || currentTab);
+      } else {
+        showDetail(hash);
+      }
       window.scrollTo(0, 0);
     }
 
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(tab); });
-      tab.addEventListener('keydown', function (e) {
-        var next = null;
-        if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
-        if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
-        if (next) { e.preventDefault(); select(next); next.focus(); }
-      });
+    document.querySelectorAll('[data-go]').forEach(function (tile) {
+      tile.addEventListener('click', function () { location.hash = tile.dataset.go; });
     });
+
+    document.getElementById('back-btn').addEventListener('click', function () {
+      if (history.length > 1) history.back();
+      else location.hash = currentTab;
+    });
+
+    tabFlat.addEventListener('click', function () { location.hash = 'flat'; });
+    tabCats.addEventListener('click', function () { location.hash = 'cats'; });
+
+    window.addEventListener('hashchange', route);
 
     try {
       var saved = localStorage.getItem('manual-tab');
-      if (saved && document.getElementById(saved)) select(document.getElementById(saved));
+      if (!location.hash && saved === 'cats') currentTab = 'cats';
     } catch (err) {}
-  })();
+    route();
 
-  // ---------- next feed ----------
-  (function () {
+    // ---------- next feed, live on the navy tile ----------
     var meals = Array.prototype.slice.call(document.querySelectorAll('.meal[data-feed]'));
-    var kicker = document.getElementById('now-kicker-text');
-    var title = document.getElementById('now-title');
-    var sub = document.getElementById('now-sub');
-    var timeline = document.getElementById('timeline');
+    var kicker = document.getElementById('tile-kicker');
+    var title = document.getElementById('tile-title');
+    var sub = document.getElementById('tile-sub');
 
     var feeds = meals.map(function (el) {
       var p = el.dataset.feed.split(':');
-      return {
-        el: el,
-        at: parseInt(p[0], 10) * 60 + parseInt(p[1], 10),
-        name: el.dataset.name,
-        food: el.dataset.food
-      };
+      return { el: el, at: parseInt(p[0], 10) * 60 + parseInt(p[1], 10), name: el.dataset.name, food: el.dataset.food };
     });
 
     function clock(mins) {
@@ -671,12 +808,6 @@
       var h12 = h % 12; if (h12 === 0) h12 = 12;
       return h12 + (m ? ':' + (m < 10 ? '0' + m : m) : '') + suffix;
     }
-
-    timeline.innerHTML = feeds.map(function (f) {
-      return '<div class="pip" data-at="' + f.at + '"><span class="t">' + clock(f.at) + '</span>' +
-             '<span class="m">' + f.name.replace('First ', '1st ').replace('Second ', '2nd ') + '</span></div>';
-    }).join('');
-    var pips = Array.prototype.slice.call(timeline.querySelectorAll('.pip'));
 
     function paint() {
       var now = new Date();
@@ -689,16 +820,10 @@
         if (feeds[i].at + 30 >= mins) { next = feeds[i]; break; }
       }
 
-      pips.forEach(function (p) {
-        var at = parseInt(p.dataset.at, 10);
-        p.classList.toggle('done', !next || at < next.at);
-        p.classList.toggle('now', !!next && at === next.at);
-      });
-
       if (!next) {
         kicker.textContent = 'Done for today';
         title.textContent = 'Overnight dry';
-        sub.innerHTML = 'Leave <strong>~20g of dry</strong> down, then breakfast at <strong>7:00am</strong>.';
+        sub.textContent = 'Leave ~20g of dry down. Breakfast at 7:00am.';
         return;
       }
 
@@ -708,11 +833,10 @@
 
       var due = next.at - mins;
       var when;
-      if (due <= 0) when = '<strong>Due now</strong>';
-      else if (due < 60) when = 'In <strong>' + due + ' minutes</strong>';
-      else when = 'At <strong>' + clock(next.at) + '</strong>';
-
-      sub.innerHTML = when + ' — ' + next.food + ' for each of them.';
+      if (due <= 0) when = 'Due now';
+      else if (due < 60) when = 'In ' + due + ' minutes';
+      else when = 'At ' + clock(next.at);
+      sub.textContent = when + ' — ' + next.food + ' for each of them.';
     }
 
     paint();
@@ -720,7 +844,6 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) paint(); });
   })();
 
-  // ---------- service worker ----------
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('sw.js').catch(function () {});
