@@ -2,9 +2,11 @@
 
 A single-page guide for friends staying at the flat with Fred and Luna. Two tabs: the cats and their timetable, then how the flat works.
 
-Built for lookup rather than reading. The Cats tab opens on a live panel naming the next feed and what to serve, with the day's four feeds as a timeline. The Flat tab opens on the three things every guest asks for. Everything below that sits in labelled rows, each showing a one-line answer and opening for the detail, so neither tab runs longer than a couple of screens.
+The Flat comes first, organised as area cards: WiFi, front door and bins up top, then a card per room. The Cats tab leads with a navy panel naming the next feed and what to serve, beside the day's schedule. Everything is visible on the page, with no rows to open.
 
-Light only, matching the Strand Labs site. Installable as a PWA and works offline once opened, so a sitter can add it to their home screen and still read it if the WiFi drops.
+Design follows the Strand Labs site rather than the palette tokens: white grounds, `gray-50` cards with a `gray-200` border and a soft shadow, bold Playfair headings in navy, Inter for body, a navy band for the vet details, and green used only on the next-feed marker. No cream, and light only.
+
+Installable as a PWA and works offline once opened, so a sitter can add it to their home screen and still read it if the WiFi drops.
 
 ## Hosting
 
@@ -22,9 +24,9 @@ Static site on GitHub Pages, served from `main` at the repository root. Push to 
 
 ## Editing
 
-Content lives directly in `index.html`. The feed rows in the schedule table carry `data-feed="HH:MM"`, `data-name` and `data-food`, which drive both the now panel and the timeline: change a time in the visible cell and in `data-feed`, and everything above follows.
+Content lives directly in `index.html`. The meal rows carry `data-feed="HH:MM"`, `data-name` and `data-food`, which drive the navy panel and the timeline: change a time in the visible cell and in `data-feed`, and everything above follows.
 
-A collapsible row is a `<details>` holding a `.label` (what it is) and a `.hint` (the answer in one line, truncated if it runs long, so keep hints short). Add `open` to the tag for anything that should start expanded.
+Cards sit on a twelve-column grid. Give a card `s4`, `s5`, `s6` or `s7` for its desktop width, and `tall` to span two rows; below 760px everything is full width.
 
 Bump `CACHE` in `sw.js` when changing anything other than `index.html`, so old assets are dropped.
 
