@@ -15,6 +15,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<noscript><style>
+  .tabs, .nowline { display: none; }
+  .page[hidden] { display: block !important; }
+</style></noscript>
 <title>Flat Manual</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -99,7 +103,13 @@
     transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
   }
   .tab:hover { color: var(--navy); border-color: #cbd5e1; }
+  .tab:active { transform: scale(0.98); }
   .tab[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  /* a finger needs more room than a cursor */
+  @media (pointer: coarse) {
+    .tab { min-height: 2.75rem; padding-left: 1.1rem; padding-right: 1.1rem; }
+  }
 
   /* ===================== page ===================== */
 
@@ -120,11 +130,13 @@
   .masthead h1 {
     font-family: var(--serif);
     font-weight: 700;
+    text-wrap: balance;
     font-size: clamp(2.4rem, 9vw, 4rem);
     line-height: 1.02;
     letter-spacing: -0.035em;
     color: var(--navy);
   }
+
   /* the live line at the top of the cats page */
 
   .nowline {
@@ -136,7 +148,7 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -145,6 +157,7 @@
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex: none; }
   .nowline .what {
     font-family: var(--serif);
+    font-variant-numeric: tabular-nums;
     font-weight: 700;
     font-size: clamp(1.35rem, 5vw, 1.7rem);
     letter-spacing: -0.02em;
@@ -152,6 +165,14 @@
     line-height: 1.2;
   }
   .nowline .what span { color: var(--muted); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 
   /* ===================== sections ===================== */
 
@@ -169,13 +190,14 @@
       column-gap: 3rem;
       align-items: start;
     }
-    section > h2 { grid-column: 1; position: sticky; top: 5.5rem; }
+    section > h2 { grid-column: 1; position: sticky; top: calc(5rem + var(--safe-top)); }
     section > .content { grid-column: 2; }
   }
 
   section > h2 {
     font-family: var(--serif);
     font-weight: 700;
+    text-wrap: balance;
     font-size: clamp(1.5rem, 5vw, 1.85rem);
     line-height: 1.15;
     letter-spacing: -0.02em;
@@ -187,13 +209,13 @@
   .entry { display: grid; gap: 0.25rem; }
   .entry h3 {
     font-family: var(--sans);
-    font-size: 0.71rem;
+    font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--muted);
   }
-  .entry p { max-width: 60ch; }
+  .entry p { max-width: 60ch; text-wrap: pretty; }
   .entry p + p { margin-top: 0.5rem; }
   strong { color: var(--charcoal); font-weight: 600; }
 
@@ -222,6 +244,8 @@
     transition: opacity 160ms ease;
   }
   button.big:hover { opacity: 0.75; }
+  button.big:active { opacity: 0.6; }
+  @media (pointer: coarse) { button.big { padding: 0.15rem 0 0.3rem; } }
   .copy-hint { transition: color 200ms ease; }
   .copy-hint.done { color: var(--green); font-weight: 500; }
 
@@ -250,7 +274,7 @@
   .meal .amount span {
     display: inline-block;
     margin-left: 0.4rem;
-    font-size: 0.68rem;
+    font-size: 0.78rem;
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--muted);
@@ -264,11 +288,11 @@
     border-radius: 0.3rem;
     background: var(--navy);
     color: var(--white);
-    font-size: 0.58rem;
+    font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    vertical-align: 0.15em;
+    vertical-align: 0.12em;
   }
   .meal.overnight .name, .meal.overnight .amount b { color: var(--muted); font-weight: 500; }
 
@@ -284,6 +308,22 @@
   }
   .vet .tel:hover { text-decoration: underline; }
   .vet address { font-style: normal; color: var(--muted); font-size: 0.95rem; }
+
+  /* ===================== print ===================== */
+
+  @media print {
+    .topbar, .nowline { display: none; }
+    .page[hidden] { display: block !important; }
+    .page { padding-top: 0; }
+    .page + .page { break-before: page; }
+    body { font-size: 11pt; line-height: 1.5; color: #000; }
+    section { break-inside: avoid; padding: 0.6cm 0; }
+    section > h2, .masthead h1, .big { color: #000; }
+    .masthead h1 { font-size: 24pt; }
+    a { text-decoration: none; }
+    button.big { padding: 0; }
+    .copy-hint { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -312,8 +352,8 @@
       <div class="content">
         <div class="entry">
           <h3>Password</h3>
-          <button class="big copy" id="wifi-copy" type="button" data-value="KmGk73n7VTKv">KmGk73n7VTKv</button>
-          <p class="copy-hint" id="copy-hint">Tap to copy.</p>
+          <button class="big" id="wifi-copy" type="button" aria-label="Copy the WiFi password" data-value="KmGk73n7VTKv">KmGk73n7VTKv</button>
+          <p class="copy-hint" id="copy-hint" aria-live="polite">Tap to copy.</p>
         </div>
       </div>
     </section>
@@ -398,8 +438,8 @@
     <div class="masthead">
       <h1>The Cats</h1>
       <div class="nowline">
-        <span class="kicker"><span class="dot"></span><span id="now-kicker">Next feed</span></span>
-        <span class="what" id="now-what"></span>
+        <span class="kicker"><span class="dot" aria-hidden="true"></span><span id="now-kicker">Next feed</span></span>
+        <span class="what" id="now-what" aria-live="polite"></span>
       </div>
     </div>
 
@@ -578,7 +618,10 @@
       var mins = now.getHours() * 60 + now.getMinutes();
       var next = null;
 
-      meals.forEach(function (el) { el.classList.remove('is-next'); });
+      meals.forEach(function (el) {
+        el.classList.remove('is-next');
+        el.removeAttribute('aria-current');
+      });
 
       for (var i = 0; i < feeds.length; i++) {
         if (feeds[i].at + 30 >= mins) { next = feeds[i]; break; }
@@ -591,6 +634,7 @@
       }
 
       next.el.classList.add('is-next');
+      next.el.setAttribute('aria-current', 'true');
       kicker.textContent = 'Next feed';
 
       var due = next.at - mins;
