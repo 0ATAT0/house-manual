@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fred &amp; Luna">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f1e8">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Fred, Luna &amp; the Flat</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --ground: #ffffff;
+    --ground-alt: #f6f7f9;
+    --warm: #f5f1e8;
+    --warm-edge: #ebe7dd;
+    --ink: #1c1c1c;
+    --ink-strong: #0f172a;
+    --muted: #6b7280;
+    --rule: #e3e0d8;
+    --accent: #10b981;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--ground);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding-bottom: calc(3rem + var(--safe-bottom));
+  }
+
+  a { color: var(--ink-strong); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  .shell {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 clamp(1.15rem, 5vw, 2.75rem);
+  }
+
+  /* ================= header ================= */
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--warm);
+    border-bottom: 1px solid var(--warm-edge);
+    padding-top: var(--safe-top);
+  }
+
+  .topbar .shell {
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 0.95rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.35rem, 5vw, 1.75rem);
+    line-height: 1.1;
+    color: var(--ink-strong);
+    letter-spacing: -0.01em;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0.4rem;
+    background: rgba(15, 23, 42, 0.05);
+    border-radius: 999px;
+    padding: 0.25rem;
+  }
+
+  .tab {
+    flex: 1;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 260ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms ease;
+  }
+
+  .tab[aria-selected="true"] {
+    background: var(--ground);
+    color: var(--ink-strong);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  }
+
+  /* ================= panels ================= */
+
+  .panel[hidden] { display: none; }
+  .panel { display: grid; gap: clamp(2.5rem, 7vw, 3.75rem); padding-top: clamp(1.75rem, 6vw, 3rem); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .panel:not([hidden]) > * { animation: rise 560ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+    .panel:not([hidden]) > *:nth-child(2) { animation-delay: 70ms; }
+    .panel:not([hidden]) > *:nth-child(3) { animation-delay: 120ms; }
+    .panel:not([hidden]) > *:nth-child(n+4) { animation-delay: 160ms; }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  section { display: grid; gap: 1.25rem; }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--ink-strong);
+  }
+
+  p { max-width: 62ch; }
+  p + p { margin-top: 0.7rem; }
+
+  /* ================= next feed ================= */
+
+  .nextfeed {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.7rem;
+    background: var(--ground-alt);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 0.85rem 1.1rem;
+  }
+  .nextfeed .label {
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .nextfeed .what { font-weight: 600; color: var(--ink-strong); }
+  .nextfeed .when { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* ================= schedule ================= */
+
+  .scroller { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-variant-numeric: tabular-nums; }
+
+  caption { text-align: left; color: var(--muted); font-size: 0.92rem; padding-bottom: 0.9rem; max-width: 62ch; }
+
+  th, td { text-align: left; padding: 0.8rem 1rem 0.8rem 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+
+  thead th {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+    padding-bottom: 0.55rem;
+  }
+
+  tbody th { font-weight: 600; color: var(--ink-strong); white-space: nowrap; }
+  td.time { white-space: nowrap; }
+  .portion { font-weight: 600; color: var(--ink-strong); }
+  .kind {
+    display: inline-block;
+    margin-left: 0.45rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  tbody tr.overnight th { font-weight: 500; }
+  tbody tr.overnight th, tbody tr.overnight td, tbody tr.overnight .portion { color: var(--muted); }
+  tbody tr.is-next th, tbody tr.is-next td { background: rgba(16, 185, 129, 0.07); }
+  tbody tr.is-next th { box-shadow: inset 3px 0 0 var(--accent); padding-left: 0.7rem; }
+
+  /* ================= notes grid ================= */
+
+  .notes { display: grid; gap: 1.5rem; }
+  @media (min-width: 700px) { .notes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .note { display: grid; gap: 0.3rem; align-content: start; }
+  .note p { max-width: 46ch; }
+
+  /* ================= cat cards ================= */
+
+  .cats { display: grid; gap: 1rem; }
+  @media (min-width: 700px) { .cats { grid-template-columns: 1fr 1fr; } }
+
+  .cat {
+    background: var(--warm);
+    border: 1px solid var(--warm-edge);
+    padding: clamp(1.35rem, 4vw, 1.85rem);
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .cat h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
+  .cat dl { display: grid; gap: 0.8rem; }
+  .cat dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 0.1rem;
+  }
+  .cat dd p { max-width: 40ch; }
+
+  /* ================= flat entries ================= */
+
+  .entries { display: grid; }
+
+  .entry {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.3rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .entry:last-child { border-bottom: 0; }
+
+  @media (min-width: 760px) {
+    .entry { grid-template-columns: 12rem minmax(0, 1fr); gap: 0 2.5rem; align-items: baseline; }
+  }
+
+  .code {
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink-strong);
+    background: var(--ground-alt);
+    border: 1px solid var(--rule);
+    padding: 0.2rem 0.55rem;
+    user-select: all;
+  }
+
+  /* ================= vet ================= */
+
+  .vet {
+    margin-top: clamp(2.75rem, 8vw, 4rem);
+    border-top: 2px solid var(--ink-strong);
+    padding-top: 1.4rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .vet h2 { font-size: clamp(1.3rem, 4.5vw, 1.5rem); }
+  .vet .row { display: flex; flex-wrap: wrap; gap: 0.3rem 1.4rem; align-items: baseline; }
+  .vet .tel { font-weight: 600; font-size: 1.08rem; font-variant-numeric: tabular-nums; text-decoration: none; }
+  .vet address { font-style: normal; color: var(--muted); }
+
+  /* ================= dark ================= */
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #161615;
+      --ground-alt: #1d1d1b;
+      --warm: #21201d;
+      --warm-edge: #2b2a26;
+      --ink: #e8e6e1;
+      --ink-strong: #f4f2ed;
+      --muted: #a3a09a;
+      --rule: #33322e;
+      --accent: #34d399;
+    }
+    .tabs { background: rgba(255, 255, 255, 0.06); }
+    .tab[aria-selected="true"] { box-shadow: none; background: var(--ground-alt); }
+    tbody tr.is-next th, tbody tr.is-next td { background: rgba(52, 211, 153, 0.09); }
+    tbody tr.is-next { background: rgba(52, 211, 153, 0.09); }
+  }
+
+  /* On a phone the schedule stops being a table: each meal becomes a block,
+     name and time stacked on the left, the portion held at the right. */
+  @media (max-width: 620px) {
+    table { min-width: 0; display: block; }
+    caption { display: block; }
+    thead { display: none; }
+    tbody { display: block; }
+
+    tbody tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    tbody tr:last-child { border-bottom: 0; }
+
+    tbody th, tbody td { display: block; padding: 0; border: 0; }
+    tbody th { grid-column: 1; grid-row: 1; }
+    td.time { grid-column: 1; grid-row: 2; color: var(--muted); font-size: 0.9rem; }
+    tbody td:not(.time) { grid-column: 2; grid-row: 1 / span 2; text-align: right; }
+
+    tbody tr.is-next {
+      box-shadow: inset 3px 0 0 var(--accent);
+      background: rgba(16, 185, 129, 0.07);
+      padding-left: 0.7rem;
+    }
+    tbody tr.is-next th, tbody tr.is-next td { background: none; box-shadow: none; padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="shell">
+    <div class="wordmark">Fred, Luna &amp; the Flat</div>
+    <div class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" id="tab-cats" aria-controls="panel-cats" aria-selected="true">The Cats</button>
+      <button class="tab" role="tab" id="tab-flat" aria-controls="panel-flat" aria-selected="false" tabindex="-1">The Flat</button>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+
+  <!-- ==================== CATS ==================== -->
+  <div class="panel" id="panel-cats" role="tabpanel" aria-labelledby="tab-cats" tabindex="0">
+
+    <section>
+      <h2>Meals</h2>
+
+      <div class="nextfeed" id="nextfeed" hidden>
+        <span class="label">Next</span>
+        <span class="what" id="nextfeed-what"></span>
+        <span class="when" id="nextfeed-when"></span>
+      </div>
+
+      <div class="scroller">
+        <table>
+          <caption>Five feeds a day, 40g each cat each time, plus a little dry left down overnight.</caption>
+          <thead>
+            <tr><th scope="col">Meal</th><th scope="col">Time</th><th scope="col">Each cat</th></tr>
+          </thead>
+          <tbody>
+            <tr data-feed="7:00" data-name="Breakfast">
+              <th scope="row">Breakfast</th>
+              <td class="time">7:00 – 7:30am</td>
+              <td><span class="portion">40g</span><span class="kind">Wet</span></td>
+            </tr>
+            <tr data-feed="12:30" data-name="Lunch">
+              <th scope="row">Lunch</th>
+              <td class="time">12:30 – 1:00pm</td>
+              <td><span class="portion">40g</span><span class="kind">Wet</span></td>
+            </tr>
+            <tr data-feed="17:30" data-name="First dinner">
+              <th scope="row">First dinner</th>
+              <td class="time">5:30 – 6:00pm</td>
+              <td><span class="portion">40g</span><span class="kind">Dry</span></td>
+            </tr>
+            <tr data-feed="21:00" data-name="Second dinner">
+              <th scope="row">Second dinner</th>
+              <td class="time">9:00 – 9:30pm</td>
+              <td><span class="portion">40g</span><span class="kind">Wet</span></td>
+            </tr>
+            <tr class="overnight">
+              <th scope="row">Overnight</th>
+              <td class="time">Left down at bedtime</td>
+              <td><span class="portion">~20g</span><span class="kind">Dry</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notes">
+        <div class="note">
+          <h3>Break the wet food up</h3>
+          <p>It wants to be in chunks rather than a block, Luna especially. Pressing a fork into it does the job. A splash of water over the top helps with hydration.</p>
+        </div>
+        <div class="note">
+          <h3>They eat at different speeds</h3>
+          <p>Fred is a bit of a pig and will finish first. Luna eats much less and sometimes needs encouraging: hold a bit out on the fork to get her going.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>The two of them</h2>
+      <div class="cats">
+        <article class="cat">
+          <h3>Fred</h3>
+          <dl>
+            <div><dt>Food</dt><dd><p>Enthusiastic to the point of greed. Clears his bowl and would happily start on Luna's.</p></dd></div>
+            <div><dt>Affection</dt><dd><p>Heavy belly rubs, the firmer the better.</p></dd></div>
+            <div><dt>Being picked up</dt><dd><p>Will usually just accept it.</p></dd></div>
+            <div><dt>Litter</dt><dd><p>Makes no real effort to cover anything.</p></dd></div>
+          </dl>
+        </article>
+        <article class="cat">
+          <h3>Luna</h3>
+          <dl>
+            <div><dt>Food</dt><dd><p>A much smaller appetite. Wants it properly broken up, and often needs a fork held out before she starts.</p></dd></div>
+            <div><dt>Affection</dt><dd><p>Head scratches, cheeks and chin. Belly rubs too, but lighter than Fred's.</p></dd></div>
+            <div><dt>Being picked up</dt><dd><p>Some days yes, some days no, and she makes it very clear which. Put her down when she says so.</p></dd></div>
+            <div><dt>Litter</dt><dd><p>Buries it properly.</p></dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Getting on with them</h2>
+      <div class="notes">
+        <div class="note">
+          <h3>Slow blinks, not stares</h3>
+          <p>Staring at them wide-eyed freaks them out after a while. A slow blink is how you tell them everything's fine.</p>
+        </div>
+        <div class="note">
+          <h3>Laps</h3>
+          <p>Neither of them is much of a lap cat at the moment, so don't take it personally.</p>
+        </div>
+        <div class="note">
+          <h3>Sleep</h3>
+          <p>They sleep most of the day. They'll surface for lunch, but roughly 10am to 5pm they're out. Their beds are in our room, though they're rarely in them all night.</p>
+        </div>
+        <div class="note">
+          <h3>Play</h3>
+          <p>Having two means they entertain each other. The vet's line is fifteen minutes a day for a solo cat, and they well exceed that between themselves, so there's nothing you need to do. Mornings and evenings are their liveliest. If they're still going when you want to sleep, just shut the bedroom door.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Litter tray</h2>
+      <p>They usually go in the morning and again in the evening. It stinks, and there's no way around it: every scent-masking product is toxic to animals apart from candles. Scoop it when you notice it, and open a window if the cats are shut safely away.</p>
+    </section>
+
+  </div>
+
+  <!-- ==================== FLAT ==================== -->
+  <div class="panel" id="panel-flat" role="tabpanel" aria-labelledby="tab-flat" tabindex="0" hidden>
+
+    <section>
+      <h2>Practicals</h2>
+      <div class="entries">
+        <div class="entry">
+          <h3>WiFi</h3>
+          <div><p>Password <span class="code">KmGk73n7VTKv</span></p></div>
+        </div>
+        <div class="entry">
+          <h3>Front door</h3>
+          <div><p>Lift the handle upwards first, then turn the key. It won't lock otherwise.</p></div>
+        </div>
+        <div class="entry">
+          <h3>Bins</h3>
+          <div><p>General waste is collected daily. Recycling goes out Tuesday evening.</p></div>
+        </div>
+        <div class="entry">
+          <h3>Windows</h3>
+          <div>
+            <p>Upstairs windows have cat locks. Push in the two holds on the lever to move them.</p>
+            <p>Downstairs windows have no locks, so we keep them shut unless the cats are harnessed or closed in another room.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kitchen</h2>
+      <div class="entries">
+        <div class="entry">
+          <h3>Coffee</h3>
+          <div>
+            <p>The black machine makes pourover. Coffee is in the black container next to the microwave; filter papers and the basket are in the cupboard below.</p>
+            <p>It has a lot of settings, but medium roast and cold brew are the two we use. Medium roast takes about five minutes. Cold brew takes ninety, so we set it going before bed.</p>
+            <p><a href="https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Aiden_GTKYG_NA.pdf?v=1724951821" rel="noopener">Full machine guide (PDF)</a></p>
+          </div>
+        </div>
+        <div class="entry">
+          <h3>Dishwasher</h3>
+          <div><p>Tablet in, press power on, then close the door and it starts.</p></div>
+        </div>
+        <div class="entry">
+          <h3>Washing machine</h3>
+          <div><p>Use the cotton setting. Press the temperature button once to drop it to 30, or leave it at 40. Tablets and fabric softener are on the shelf above the machine.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>TV</h2>
+      <div class="entries">
+        <div class="entry">
+          <h3>Apple TV</h3>
+          <div><p>Amazon Prime is signed in. Plex has everything else gathered across the different platforms, so start there if you're looking for something specific.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="vet">
+    <h2>If something's wrong with the cats</h2>
+    <div class="row">
+      <a class="tel" href="tel:+442072322637">+44 20 7232 2637</a>
+      <address>Medivet Southwark, 79 Grange Rd, London SE1 3BW</address>
+    </div>
+    <p>Call us too, whatever the hour. We'd always rather hear about it early.</p>
+  </div>
+
+</main>
+
+<script>
+  // ---- tabs ----
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+
+    function select(tab) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      try { localStorage.setItem('manual-tab', tab.id); } catch (err) {}
+      window.scrollTo({ top: 0, behavior: 'instant' in document.documentElement.style ? 'instant' : 'auto' });
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(tab); });
+      tab.addEventListener('keydown', function (e) {
+        var next = null;
+        if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+        if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+        if (next) { e.preventDefault(); select(next); next.focus(); }
+      });
+    });
+
+    try {
+      var saved = localStorage.getItem('manual-tab');
+      if (saved) {
+        var el = document.getElementById(saved);
+        if (el) select(el);
+      }
+    } catch (err) {}
+  })();
+
+  // ---- next feed ----
+  (function () {
+    var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-feed]'));
+    var banner = document.getElementById('nextfeed');
+    var what = document.getElementById('nextfeed-what');
+    var when = document.getElementById('nextfeed-when');
+
+    function label(mins) {
+      var h = Math.floor(mins / 60), m = mins % 60;
+      var suffix = h >= 12 ? 'pm' : 'am';
+      var h12 = h % 12; if (h12 === 0) h12 = 12;
+      return h12 + ':' + (m < 10 ? '0' + m : m) + suffix;
+    }
+
+    function paint() {
+      var now = new Date();
+      var mins = now.getHours() * 60 + now.getMinutes();
+      var target = null;
+
+      rows.forEach(function (r) { r.classList.remove('is-next'); });
+
+      for (var i = 0; i < rows.length; i++) {
+        var parts = rows[i].dataset.feed.split(':');
+        var at = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        if (at + 30 >= mins) { target = { row: rows[i], at: at }; break; }
+      }
+
+      if (!target) {
+        // past the last feed: overnight dry, then tomorrow's breakfast
+        var first = rows[0];
+        what.textContent = 'Overnight dry down, then ' + first.dataset.name.toLowerCase();
+        when.textContent = 'from ' + label(parseInt(first.dataset.feed.split(':')[0], 10) * 60 + parseInt(first.dataset.feed.split(':')[1], 10)) + ' tomorrow';
+        banner.hidden = false;
+        return;
+      }
+
+      target.row.classList.add('is-next');
+      what.textContent = target.row.dataset.name;
+      var due = target.at - mins;
+      if (due <= 0) {
+        when.textContent = 'due now';
+      } else if (due < 60) {
+        when.textContent = 'in ' + due + ' min';
+      } else {
+        when.textContent = 'at ' + label(target.at);
+      }
+      banner.hidden = false;
+    }
+
+    paint();
+    setInterval(paint, 60000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) paint(); });
+  })();
+
+  // ---- service worker ----
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>
