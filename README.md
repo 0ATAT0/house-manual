@@ -2,7 +2,9 @@
 
 A single-page guide for friends staying at the flat with Fred and Luna. Two tabs: the cats and their timetable, then how the flat works.
 
-Installable as a PWA and works offline once opened, so a sitter can add it to their home screen and still read it if the WiFi drops.
+Built for lookup rather than reading. The Cats tab opens on a live panel naming the next feed and what to serve, with the day's four feeds as a timeline. The Flat tab opens on the three things every guest asks for. Everything below that sits in labelled rows, each showing a one-line answer and opening for the detail, so neither tab runs longer than a couple of screens.
+
+Light only, matching the Strand Labs site. Installable as a PWA and works offline once opened, so a sitter can add it to their home screen and still read it if the WiFi drops.
 
 ## Hosting
 
@@ -20,7 +22,9 @@ Static site on GitHub Pages, served from `main` at the repository root. Push to 
 
 ## Editing
 
-Content lives directly in `index.html`. The feed rows in the schedule table carry `data-feed="HH:MM"` and `data-name`, which drive the "next feed" banner at the top of the Cats tab: change a time in both the visible cell and the `data-feed` attribute and the banner follows.
+Content lives directly in `index.html`. The feed rows in the schedule table carry `data-feed="HH:MM"`, `data-name` and `data-food`, which drive both the now panel and the timeline: change a time in the visible cell and in `data-feed`, and everything above follows.
+
+A collapsible row is a `<details>` holding a `.label` (what it is) and a `.hint` (the answer in one line, truncated if it runs long, so keep hints short). Add `open` to the tag for anything that should start expanded.
 
 Bump `CACHE` in `sw.js` when changing anything other than `index.html`, so old assets are dropped.
 
