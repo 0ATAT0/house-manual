@@ -1,4 +1,4 @@
-const CACHE = 'house-manual-v8';
+const CACHE = 'house-manual-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -28,8 +28,18 @@ self.addEventListener('fetch', e => {
   if (url.origin !== location.origin) return;
 
   if (e.request.mode === 'navigate' || url.pathname.endsWith('/index.html')) {
+    // Bypass the HTTP cache for the document. GitHub Pages serves HTML with
+    // max-age=600, so a plain fetch() here can be answered from the browser
+    // cache and show a sitter content up to ten minutes old.
+    let fresh;
+    try {
+      fresh = new Request(e.request.url, { cache: 'reload', credentials: 'same-origin' });
+    } catch (err) {
+      fresh = e.request;
+    }
+
     e.respondWith(
-      fetch(e.request)
+      fetch(fresh)
         .then(res => {
           if (res.ok) caches.open(CACHE).then(c => c.put('./', res.clone()));
           return res;
