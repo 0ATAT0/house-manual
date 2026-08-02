@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light only">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Fred &amp; Luna">
+<meta name="apple-mobile-web-app-title" content="Flat Manual">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="manifest.json">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<title>Fred, Luna &amp; the Flat</title>
+<title>Flat Manual</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -218,6 +218,21 @@
   }
   .big.plain { user-select: auto; }
 
+  button.big {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: none;
+    font-family: var(--sans);
+    text-align: left;
+    cursor: pointer;
+    user-select: all;
+    transition: opacity 160ms ease;
+  }
+  button.big:hover { opacity: 0.75; }
+  .copy-hint { transition: color 200ms ease; }
+  .copy-hint.done { color: var(--green); font-weight: 500; }
+
   .two { display: grid; gap: 1.5rem; }
   @media (min-width: 560px) { .two { grid-template-columns: 1fr 1fr; gap: 2rem; } }
 
@@ -283,7 +298,7 @@
 
 <header class="topbar">
   <div class="shell">
-    <span class="wordmark">Fred, Luna &amp; the Flat</span>
+    <span class="wordmark">Flat Manual</span>
     <div class="tabs" role="tablist" aria-label="Sections">
       <button class="tab" role="tab" id="tab-flat" aria-controls="page-flat" aria-selected="true">The Flat</button>
       <button class="tab" role="tab" id="tab-cats" aria-controls="page-cats" aria-selected="false" tabindex="-1">The Cats</button>
@@ -306,8 +321,8 @@
       <div class="content">
         <div class="entry">
           <h3>Password</h3>
-          <span class="big">KmGk73n7VTKv</span>
-          <p>Tap to select.</p>
+          <button class="big copy" id="wifi-copy" type="button" data-value="KmGk73n7VTKv">KmGk73n7VTKv</button>
+          <p class="copy-hint" id="copy-hint">Tap to copy.</p>
         </div>
       </div>
     </section>
@@ -317,8 +332,8 @@
       <div class="content">
         <div class="entry">
           <h3>To lock it</h3>
-          <span class="big plain">Lift the handle, then turn the key</span>
-          <p>The handle has to be up before the key will turn. The door feels shut either way, so it's worth checking.</p>
+          <span class="big plain">Lift the handle, let it back to neutral, then turn the key</span>
+          <p>Lifting the handle is the first locking mechanism: it throws the bolts. Let the handle come back to neutral, then turn the key to lock it off. The door feels shut either way, so it's worth checking.</p>
         </div>
       </div>
     </section>
@@ -345,7 +360,7 @@
         <div class="two">
           <div class="entry">
             <h3>Recycling</h3>
-            <p><strong>Tuesday evening.</strong></p>
+            <p>Tuesday evening.</p>
           </div>
           <div class="entry">
             <h3>General waste</h3>
@@ -401,23 +416,23 @@
     <section>
       <h2>Feeding</h2>
       <div class="content">
-        <p class="lead-in">Four meals a day, 40g each cat each time, plus dry left down overnight.</p>
+        <p class="lead-in">Four meals a day each, plus dry left down overnight. The amount changes by meal.</p>
 
         <div class="sched">
-          <div class="meal" data-feed="7:00" data-name="Breakfast" data-food="40g of wet">
+          <div class="meal" data-feed="7:00" data-name="Breakfast" data-food="a tin of wet (80g)">
             <span class="name">Breakfast</span>
             <span class="when">7:00 – 7:30am</span>
-            <span class="amount"><b>40g</b><span>Wet</span></span>
+            <span class="amount"><b>80g</b><span>Wet, 1 tin</span></span>
           </div>
-          <div class="meal" data-feed="12:30" data-name="Lunch" data-food="40g of wet">
+          <div class="meal" data-feed="12:30" data-name="Lunch" data-food="20g of dry">
             <span class="name">Lunch</span>
             <span class="when">12:30 – 1:00pm</span>
-            <span class="amount"><b>40g</b><span>Wet</span></span>
+            <span class="amount"><b>20g</b><span>Dry</span></span>
           </div>
-          <div class="meal" data-feed="17:30" data-name="First dinner" data-food="40g of dry">
+          <div class="meal" data-feed="17:30" data-name="First dinner" data-food="40g of wet">
             <span class="name">First dinner</span>
             <span class="when">5:30 – 6:00pm</span>
-            <span class="amount"><b>40g</b><span>Dry</span></span>
+            <span class="amount"><b>40g</b><span>Wet</span></span>
           </div>
           <div class="meal" data-feed="21:00" data-name="Second dinner" data-food="40g of wet">
             <span class="name">Second dinner</span>
@@ -439,7 +454,7 @@
         <div class="entry">
           <h3>If one of them isn't eating</h3>
           <p>Luna eats much less than Fred and sometimes needs it held out on a fork to get her going. Normal for her.</p>
-          <p>Fred skipping a meal is unusual. If he skips two in a row, call us.</p>
+          <p>Fred skipping a meal is unusual. If he skips two in a row, drop us a message.</p>
         </div>
       </div>
     </section>
@@ -477,7 +492,7 @@
     </section>
 
     <section>
-      <h2>Living with them</h2>
+      <h2>Good to know</h2>
       <div class="content">
         <div class="entry">
           <h3>Saying hello</h3>
@@ -509,7 +524,7 @@
         </div>
         <div class="entry">
           <h3>Us</h3>
-          <p>Call us any time, and early rather than late.</p>
+          <p>Give us a ring whenever, even if it's just to check something.</p>
         </div>
       </div>
     </section>
@@ -600,6 +615,68 @@
     paint();
     setInterval(paint, 60000);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) paint(); });
+  })();
+
+  // ---------- copy the wifi password ----------
+  (function () {
+    var btn = document.getElementById('wifi-copy');
+    var hint = document.getElementById('copy-hint');
+    if (!btn) return;
+    var reset;
+
+    function flash(message, ok) {
+      hint.textContent = message;
+      hint.classList.toggle('done', !!ok);
+      clearTimeout(reset);
+      reset = setTimeout(function () {
+        hint.textContent = 'Tap to copy.';
+        hint.classList.remove('done');
+      }, 2400);
+    }
+
+    // execCommand path, for browsers without the async clipboard API
+    function legacyCopy(text) {
+      var field = document.createElement('textarea');
+      field.value = text;
+      field.setAttribute('readonly', '');
+      field.style.cssText = 'position:absolute;left:-9999px';
+      document.body.appendChild(field);
+      field.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(field);
+      return ok;
+    }
+
+    // leave the password selected either way, so a failed copy degrades to a long-press
+    function selectButton() {
+      try {
+        var range = document.createRange();
+        range.selectNodeContents(btn);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } catch (err) {}
+    }
+
+    btn.addEventListener('click', function () {
+      var text = btn.dataset.value;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          flash('Copied.', true);
+        }).catch(function () {
+          var ok = legacyCopy(text);
+          if (!ok) selectButton();
+          flash(ok ? 'Copied.' : 'Long-press to copy.', ok);
+        });
+        return;
+      }
+
+      var ok = legacyCopy(text);
+      if (!ok) selectButton();
+      flash(ok ? 'Copied.' : 'Long-press to copy.', ok);
+    });
   })();
 
   if ('serviceWorker' in navigator) {
