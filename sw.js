@@ -1,4 +1,4 @@
-const CACHE = 'house-manual-v14';
+const CACHE = 'house-manual-v15';
 const ASSETS = [
   './',
   './index.html',
